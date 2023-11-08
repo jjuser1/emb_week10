@@ -125,10 +125,11 @@ static struct file_operations fops = {
     .write = driver_write
 
 };
-
+//this function is called, when the modle is loaded int to kernel
 static int __init ModuleInit(void) {
     printk("Hello, Kernel!\n");
 
+    /*Allocate a device nr*/
     if (alloc_chrdev_region(&my_device_nr, 0, 1, DRIVER_NAME) < 0) {
         printk("Device Nr. could not be allocated!\n");
         return -1;
@@ -138,7 +139,7 @@ static int __init ModuleInit(void) {
 
     /* Create device class */
     if ((my_class = class_create(THIS_MODULE, DRIVER_CLASS)) == NULL) {
-        printk("Can not create device dile!\n");
+        printk("Device class can not created!\n");
         goto ClassError;
     }
     //Create device  file/
@@ -319,12 +320,12 @@ AddError:
 FileError:
     class_destroy(my_class);
 ClassError:
-    unregister_crdev_region(my_device_nr, 1);
+    unregister_chrdev_region(my_device_nr, 1);
 
     return -1;
 }
-
-static void__exit ModuleExit(void) {
+//this function is called when the module is removed from the kernel
+static void __exit ModuleExit(void) {
     gpio_set_value(2, 0);
     gpio_set_value(3, 0);
     gpio_set_value(4, 0);
