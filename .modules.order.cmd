@@ -1,1 +1,0 @@
-cmd_/home/heung/working/emb_week10/modules.order := {   echo /home/heung/working/emb_week10/seg_example_driver.ko;   echo /home/heung/working/emb_week10/button_driver.ko; :; } | awk '!x[$$0]++' - > /home/heung/working/emb_week10/modules.order
