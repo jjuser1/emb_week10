@@ -54,7 +54,7 @@ void print_menu()
 int seg_display(int num, int port) {
 
     int result;
-    
+
     if (port == 0)
     {
         port = D1;
@@ -75,7 +75,7 @@ int seg_display(int num, int port) {
     result = seg_num[num] << 4 | port;
 
     return result;
-    
+
 }
 
 void up_count() {
@@ -90,8 +90,6 @@ void up_count() {
     num1 = (num / 10) % 10; // tens place of num
     num0 = num % 10; // ones place of num
 
-
-
 }
 
 void down_count() {
@@ -100,10 +98,12 @@ void down_count() {
     if (num < 0) {
         num = 9999;
     }
+
     num3 = num / 1000; // thousands place of num
     num2 = (num / 100) % 10; // hundreds place of num
     num1 = (num / 10) % 10; // tens place of num
     num0 = num % 10; // ones place of num
+
 }
 
 int main(int argc, char** argv)
@@ -112,22 +112,22 @@ int main(int argc, char** argv)
     char key;
     int tmp_n;
     int delay_time;
-    
+
     int dev = open("/dev/my_segment", O_RDWR); // if you want read = 'O_RDONLY' write ='O_WRDONLY', read&write='O_RDWR'
 
     //button_driver	
-    int dev1 = open("dev/my_gpio",O_RDONLY); // read only
+    int dev1 = open("dev/my_gpio", O_RDONLY); // read only
     char buffer[2];
-	ssize_t bytes_read;
+    ssize_t bytes_read;
 
-    if(dev1 < 0){
-		printf("gpio_driver Opening was not possible!\n");
-    	return -1;
-	}
-	
-	//button state read
-	bytes_read = read(dev1, buffer, sizeof(buffer));
-	//button up state buffer[0], button down state bffer[1]
+    if (dev1 < 0) {
+        printf("gpio_driver Opening was not possible!\n");
+        return -1;
+    }
+
+    //button state read
+    bytes_read = read(dev1, buffer, sizeof(buffer));
+    //button up state buffer[0], button down state buffer[1]
 
     if (dev == -1) {
         printf("Opening was not possible!\n");
@@ -146,27 +146,50 @@ int main(int argc, char** argv)
     data[2] = seg_display(num1, 2);
     data[3] = seg_display(num0, 3);
 
+    int state1 = 0;
+    int state2 = 0;
+
+    int prev1;
+    int prev2;
+
+    int tmp1;
+    int tmp2;
 
     while (1) {
         key = get_key();
-		bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
-		if(bytes_read == -1){
-			printf("Failed read button state\n");
-			}
+        bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
+        if (bytes_read == -1) {
+            printf("Failed read button state\n");
+        }
 
+        prev1 = tmp1;
+        tmp1 = buffer[0];
 
-		if(buffer[0] == 1){
-			up_count();
-			}
-		if(buffer[1]== 1){
-			down_count();
-			}
+        if (tmp1 != prev1) {
+            if (buffer[0] == 1) {
+                if (state1 == 0) {
+                     up_count();  
+                }
+                state1 = !state1;
+            }
+        }
+        prev2 = tmp2;
+        tmp2 = buffer[1];
+
+        if (tmp2 != prev2) {
+            if (buffer[1] == 1) {
+                if (state2 == 0) {
+                    down_count();
+                }
+                state2 = !state2;
+            }
+        }
 
         if (key == 'q') {
-			printf("exit this program.\n");
+            printf("exit this program.\n");
             break;
-	}
-        else{
+        }
+        else {
             if (key == 'u') {
                 up_count();
             }
@@ -174,27 +197,26 @@ int main(int argc, char** argv)
                 down_count();
             }
             else if (key == 'p') {
-            	printf("count setting: ");
-				scanf("%d", &num);
-				num3 = num / 1000; // thousands place of num
-	      		num2 = (num / 100) % 10; // hundreds place of num
-	    		num1 = (num / 10) % 10; // tens place of num
-	    		num0 = num % 10; // ones place of num
-
-           }
+                printf("count setting: ");
+                scanf("%d", &num);
+                num3 = num / 1000; // thousands place of num
+                num2 = (num / 100) % 10; // hundreds place of num
+                num1 = (num / 10) % 10; // tens place of num
+                num0 = num % 10; // ones place of num
+            }
 
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
             data[2] = seg_display(num1, 2);
             data[3] = seg_display(num0, 3);
-        
-        write(dev, &data[tmp_n], 2);
-        usleep(delay_time);//delay 1ms
 
-        tmp_n++;
+            write(dev, &data[tmp_n], 2);
+            usleep(delay_time);//delay 1ms
 
-        if (tmp_n > 3) {
-            tmp_n = 0;
+            tmp_n++;
+
+            if (tmp_n > 3) {
+                tmp_n = 0;
             }
         }
     }
@@ -202,7 +224,6 @@ int main(int argc, char** argv)
     close_keyboard();
     write(dev, 0x0000, 2);
     close(dev);
-	close(dev1);
+    close(dev1);
     return 0;
 }
-
