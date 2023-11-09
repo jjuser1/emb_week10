@@ -27,35 +27,24 @@ static struct cdev my_device;
  */
 
 //struct read delta vlaue 
-struct DeltaValues{
-	int delta;//gpio22
-	int delta1;//gpio27
-};
+int delta
 
-static struct ssize_t driver_read(struct file* File, char* user_buffer, size_t count, loff_t* offs) {
-	struct DeltaValues delta_values;
-	int to_copy, not_copied;
-	int to_copy1, not_copied1;
-	char tmp;
-	char tmp1;
+static ssize_t driver_read(struct file* File, char* user_buffer, size_t count, loff_t* offs) {
+    int to_copy, not_copied;
+    char button_state[2]; // 두 버튼의 상태를 저장하기 위해
 
-	/*get amount of data to copy*/
-	to_copy = min(count, sizeof(tmp));
-	to_copy1 = min(count, sizeof(tmp1);
-	
-	/*read value of button*/
-	tmp = gpio_get_value(22) + '0'; //gpio22
-	tmp1 = gpio_get_value(27) + '0';//gpio27
+    // 버튼의 값을 읽어서 문자로 변환
+    button_state[0] = gpio_get_value(22) + '0';
+    button_state[1] = gpio_get_value(27) + '0';
 
-	/*copy data to user*/
-	not_copied = copy_to_user(user_buffer, &tmp, to_copy);
-	not_copied1 = copy_to_suer(user_buffer , &tmp1, to_copy1);
-	
-	/*calculate data*/
-	delta_valuse.delta = to_copy - not_copied;//gpio22
-	delta_values.delta1 = to_copy1 - not_copied1;//gpio27
+    // 복사할 바이트 수를 가져옵니다 (button_state의 크기를 초과할 수 없음)
+    to_copy = min(count, sizeof(button_state));
 
-	return delta_values;
+    // 사용자 버퍼로 데이터를 복사합니다.
+    not_copied = copy_to_user(user_buffer, &button_state, to_copy);
+
+    // 사용자 공간으로 복사된 바이트 수를 반환합니다.
+    return to_copy - not_copied;
 }
 
 /*
