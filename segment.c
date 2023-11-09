@@ -122,7 +122,7 @@ int main(int argc, char** argv)
     int dev = open("/dev/my_segment", O_RDWR); // if you want read = 'O_RDONLY' write ='O_WRDONLY', read&write='O_RDWR'
 
     //button_driver	
-    int dev1 = open("dev/my_gpio",O_RDONLY)l // read only
+    int dev1 = open("dev/my_gpio",O_RDONLY); // read only
     char buffer[2];
 	ssize_t bytes_read;
 
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	}
 	
 	//button state read
-	bytes_read = read(dev1, buffer, seizeof(buffer));
+	bytes_read = read(dev1, buffer, sizeof(buffer));
 	//button up state buffer[0], button down state bffer[1]
 
     if (dev == -1) {
@@ -156,7 +156,10 @@ int main(int argc, char** argv)
     while (1) {
         key = get_key();
 		bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
-		
+		if(bytes_read == -1){
+			printf("Failed read button state\n");
+			}
+
 
 		if(buffer[0] == 1){
 			up_count();
@@ -177,12 +180,12 @@ int main(int argc, char** argv)
                 down_count();
             }
             else if (key == 'p') {
-                printf("count setting: ");
-		scanf("%d", &num);
-		num3 = num / 1000; // thousands place of num
-	      	num2 = (num / 100) % 10; // hundreds place of num
-	    	num1 = (num / 10) % 10; // tens place of num
-	    	num0 = num % 10; // ones place of num
+            	printf("count setting: ");
+				scanf("%d", &num);
+				num3 = num / 1000; // thousands place of num
+	      		num2 = (num / 100) % 10; // hundreds place of num
+	    		num1 = (num / 10) % 10; // tens place of num
+	    		num0 = num % 10; // ones place of num
 
            }
 
@@ -205,6 +208,7 @@ int main(int argc, char** argv)
     close_keyboard();
     write(dev, 0x0000, 2);
     close(dev);
+	close(dev1);
     return 0;
 }
 
