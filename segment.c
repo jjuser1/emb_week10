@@ -43,11 +43,14 @@ char get_key()
 void print_menu()
 {
     printf("\n----------menu----------\n");
-    printf("[r] : program reset\n");
+    printf("[p] : count setting\n");
+    printf("[u]: up count"\n);
+    printf("[d] :down count"\n);
     printf("[q] : program exit\n");
     printf("------------------------\n\n");
 }
 
+//distplay digit
 int seg_display(int num, int port) {
 
     int result;
@@ -121,6 +124,7 @@ int main(int argc, char** argv)
     tmp_n = 0;
     delay_time = 1000;
 
+    //display init 0
     data[0] = seg_display(num3, 0);
     data[1] = seg_display(num2, 1);
     data[2] = seg_display(num1, 2);
@@ -141,12 +145,14 @@ int main(int argc, char** argv)
                 down_count();
             }
             else if (key == 'p') {
-                num3 = 0;
-                num2 = 0;
-                num1 = 0;
-                num0 = 0;
-                num = 0;
-            }
+                printf("count setting: ");
+		scanf("%d", &num);
+		num3 = num / 1000; // thousands place of num
+	      	num2 = (num / 100) % 10; // hundreds place of num
+	    	num1 = (num / 10) % 10; // tens place of num
+	    	num0 = num % 10; // ones place of num
+
+           }
 
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
@@ -154,7 +160,7 @@ int main(int argc, char** argv)
             data[3] = seg_display(num0, 3);
         
         write(dev, &data[tmp_n], 2);
-        usleep(delay_time);
+        usleep(delay_time);//delay 1ms
 
         tmp_n++;
 
