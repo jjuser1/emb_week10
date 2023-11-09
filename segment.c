@@ -80,36 +80,30 @@ int seg_display(int num, int port) {
 
 void up_count() {
     num++;
+
+    if (num > 9999) {
+        num = 0;
+    }
+
     num3 = num / 1000; // thousands place of num
     num2 = (num / 100) % 10; // hundreds place of num
     num1 = (num / 10) % 10; // tens place of num
     num0 = num % 10; // ones place of num
 
-    if (num > 9999) {
-        num = 0;
-	num3 = 0;
-	num2 = 0;
-	num1 = 0;
-    }
+
 
 }
 
 void down_count() {
     num--;
+
+    if (num < 0) {
+        num = 9999;
+    }
     num3 = num / 1000; // thousands place of num
     num2 = (num / 100) % 10; // hundreds place of num
     num1 = (num / 10) % 10; // tens place of num
     num0 = num % 10; // ones place of num
-
-    if (num < 0) {
-        num = 9999;
-	num3 = num / 1000; // thousands place of num
-	num2 = (num / 100) % 10; // hundreds place of num
-	num1 = (num / 10) % 10; // tens place of num
-	num0 = num % 10; // ones place of num
-
-    }
-
 }
 
 int main(int argc, char** argv)
@@ -171,7 +165,7 @@ int main(int argc, char** argv)
         if (key == 'q') {
 			printf("exit this program.\n");
             break;
-        }
+	}
         else{
             if (key == 'u') {
                 up_count();
