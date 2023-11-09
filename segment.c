@@ -87,6 +87,9 @@ void up_count() {
 
     if (num > 9999) {
         num = 0;
+	num3 = 0;
+	num2 = 0;
+	num1 = 0;
     }
 
 }
@@ -100,6 +103,11 @@ void down_count() {
 
     if (num < 0) {
         num = 9999;
+	num3 = num / 1000; // thousands place of num
+	num2 = (num / 100) % 10; // hundreds place of num
+	num1 = (num / 10) % 10; // tens place of num
+	num0 = num % 10; // ones place of num
+
     }
 
 }
@@ -110,8 +118,22 @@ int main(int argc, char** argv)
     char key;
     int tmp_n;
     int delay_time;
-
+    
     int dev = open("/dev/my_segment", O_RDWR); // if you want read = 'O_RDONLY' write ='O_WRDONLY', read&write='O_RDWR'
+
+    //button_driver	
+    int dev1 = open("dev/my_gpio",O_RDONLY)l // read only
+    char buffer[2];
+	ssize_t bytes_read;
+
+    if(dev1 < 0){
+		printf("gpio_driver Opening was not possible!\n");
+    	return -1;
+	}
+	
+	//button state read
+	bytes_read = read(dev1, buffer, seizeof(buffer));
+	//button up state buffer[0], button down state bffer[1]
 
     if (dev == -1) {
         printf("Opening was not possible!\n");
@@ -133,8 +155,18 @@ int main(int argc, char** argv)
 
     while (1) {
         key = get_key();
+		bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
+		
+
+		if(buffer[0] == 1){
+			up_count();
+			}
+		if(buffer[1]== 1){
+			down_count();
+			}
+
         if (key == 'q') {
-            printf("exit this program.\n");
+			printf("exit this program.\n");
             break;
         }
         else{
