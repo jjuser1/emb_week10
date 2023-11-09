@@ -111,7 +111,7 @@ static int __init ModuleInit(void) {
 	}
 
 	/*Set GPIO 22 direction*/
-	if (gpio_direction_input(22, 0)) {
+	if (gpio_direction_input(22)) {
 		printk("Can not set GPIO 22 to input!\n");
 		goto Gpio4Error;
 	}
