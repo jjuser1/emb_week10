@@ -44,8 +44,8 @@ void print_menu()
 {
     printf("\n----------menu----------\n");
     printf("[p] : count setting\n");
-    printf("[u]: up count"\n);
-    printf("[d] :down count"\n);
+    printf("[u]: up count\n");
+    printf("[d] :down count\n");
     printf("[q] : program exit\n");
     printf("------------------------\n\n");
 }
