@@ -162,10 +162,10 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == 1 && prev_buffer[0] == 0) { // 버튼 1이 눌렸는지 확인
+		if (buffer[0] == '1' && prev_buffer[0] == '0') { // 버튼 1이 눌렸는지 확인
 			up_count();
 			}
-		if (buffer[1] == 1 && prev_buffer[1] == 0) { // 버튼 2가 눌렸는지 확인
+		if (buffer[1] == '1' && prev_buffer[1] == '0') { // 버튼 2가 눌렸는지 확인
 			down_count();
 			}
 
