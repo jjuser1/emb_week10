@@ -117,9 +117,9 @@ int main(int argc, char** argv)
 
     //button_driver	
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
-    char buffer[2];
+    int buffer[2];
     ssize_t bytes_read;
-	char inputBuffer[100];
+	int inputBuffer[100];
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
         return -1;
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
     data[2] = seg_display(num1, 2);
     data[3] = seg_display(num0, 3);
 
-	char prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
+	int prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
 
     while (1) {
         key = get_key();
@@ -162,10 +162,10 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == '1') { // 버튼 1이 눌렸는지 확인
+		if (buffer[0] == 1) { // 버튼 1이 눌렸는지 확인
 			up_count();
 			}
-		if (buffer[1] == '1' ) { // 버튼 2가 눌렸는지 확인
+		if (buffer[1] == 1 ) { // 버튼 2가 눌렸는지 확인
 			down_count();
 			}
 
