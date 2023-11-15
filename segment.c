@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     int dev = open("/dev/my_segment", O_RDWR); // if you want read = 'O_RDONLY' write ='O_WRDONLY', read&write='O_RDWR'
 
     //button_driver	
-    int dev1 = open("/dev/my_gpio", O_RDWR); // read only
+    int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
     char buffer[2];
     ssize_t bytes_read;
     if (dev1 < 0) {
@@ -146,6 +146,8 @@ int main(int argc, char** argv)
     data[3] = seg_display(num0, 3);
 
 	char prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
+	int state1 = 0;//button up toggle state
+	int state2 = 0;//button down toggle state
 
     while (1) {
         key = get_key();
@@ -162,46 +164,32 @@ int main(int argc, char** argv)
         else {
 		
 			if (buffer[0] != prev_buffer[0] ) { // 버튼 1이 눌렸는지 확인
-				up_count();
+				if (state1 == 0) {
+					up_count();
+					}
+				state1 = !state1;
 				}
 			if (buffer[1] != prev_buffer[1]) { // 버튼 2가 눌렸는지 확인
-				down_count();
+				if(state2 == 0){
+					down_count();
+					}
+				state2 = !state2;
 				}
 
 			// 현재 버튼 상태를 이전 상태로 저장
 			prev_buffer[0] = buffer[0];
 			prev_buffer[1] = buffer[1];
-
-
-
-
             if (key == 'u') {
                 up_count();
             }
             else if (key == 'd') {
                 down_count();
             }
-           /* else if (key == 'p') {
-				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
-    				if (sscanf(inputBuffer, "%d", &num) == 1) {
-						// 정상적으로 숫자를 입력 받았을 때 처리
-						num3 = num / 1000; // thousands place of num
-						num2 = (num / 100) % 10; // hundreds place of num
-						num1 = (num / 10) % 10; // tens place of num
-						num0 = num % 10; // ones place of num
-						} 
-				else {
-					printf("Invalid input.\n");
-    }
-}
-
-            }*/
-
+		}
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
             data[2] = seg_display(num1, 2);
             data[3] = seg_display(num0, 3);
-
             write(dev, &data[tmp_n], 2);
             usleep(delay_time);//delay 1ms
 
@@ -210,8 +198,8 @@ int main(int argc, char** argv)
             if (tmp_n > 3) {
                 tmp_n = 0;
             }
-        }
-    }
+        
+		}
 
     close_keyboard();
     write(dev, 0x0000, 2);
