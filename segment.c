@@ -185,6 +185,13 @@ int main(int argc, char** argv)
             else if (key == 'd') {
                 down_count();
             }
+			else if (key == 'p'){
+				num = 0;
+				num3 = 0;
+				num2 = 0;
+				num1 = 0;
+				num0 = 0;
+				}
 		}
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
