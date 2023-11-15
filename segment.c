@@ -117,7 +117,7 @@ int main(int argc, char** argv)
 
     //button_driver	
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
-    int buffer[2];
+    char buffer[2];
     ssize_t bytes_read;
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
@@ -145,10 +145,10 @@ int main(int argc, char** argv)
     data[2] = seg_display(num1, 2);
     data[3] = seg_display(num0, 3);
 
-	int prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
-	char tmp1= "0";//count setting
-	char tmp2[10]= "";
-	int i=0;
+	char prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
+	int state1 = 0;//button up toggle state
+	int state2 = 0;//button down toggle state
+
     while (1) {
         key = get_key();
         bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
@@ -163,53 +163,33 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == 1) { // 버튼 1이 눌렸는지 확인
-			up_count();
-			}
-		if (buffer[1] == 1 ) { // 버튼 2가 눌렸는지 확인
-			down_count();
-			}
+			if (buffer[0] != prev_buffer[0] ) { // 버튼 1이 눌렸는지 확인
+				if (state1 == 0) {
+					up_count();
+					}
+				state1 = !state1;
+				}
+			if (buffer[1] != prev_buffer[1]) { // 버튼 2가 눌렸는지 확인
+				if(state2 == 0){
+					down_count();
+					}
+				state2 = !state2;
+				}
 
-		// 현재 버튼 상태를 이전 상태로 저장
-		prev_buffer[0] = buffer[0];
-		prev_buffer[1] = buffer[1];
-
-
-
-
+			// 현재 버튼 상태를 이전 상태로 저장
+			prev_buffer[0] = buffer[0];
+			prev_buffer[1] = buffer[1];
             if (key == 'u') {
                 up_count();
             }
             else if (key == 'd') {
                 down_count();
             }
-            else if (key == 'p') 
-				{printf("num? : ");
-				while(i < 4 && tmp1 != '\0') { // '\0'는 문자열의 끝을 나타냄
-					key = tmp1;
-        			tmp2[i] = tmp1; // 문자를 추가
-        			tmp2[i + 1] = '\0'; // 문자열의 끝에 널 문자 추가
-        			i++;
-    }
-				num = atoi(tmp2);	
-				// 정상적으로 숫자를 입력 받았을 때 처리
-				num3 = num / 1000; // thousands place of num
-				num2 = (num / 100) % 10; // hundreds place of num
-				num1 = (num / 10) % 10; // tens place of num
-				num0 = num % 10; // ones place of num
-						} 
-				else {
-					printf("Invalid input.\n");
-    }
-}
-
-            }
-
+		}
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
             data[2] = seg_display(num1, 2);
             data[3] = seg_display(num0, 3);
-
             write(dev, &data[tmp_n], 2);
             usleep(delay_time);//delay 1ms
 
@@ -218,8 +198,8 @@ int main(int argc, char** argv)
             if (tmp_n > 3) {
                 tmp_n = 0;
             }
-        }
-    }
+        
+		}
 
     close_keyboard();
     write(dev, 0x0000, 2);
@@ -227,4 +207,3 @@ int main(int argc, char** argv)
     close(dev1);
     return 0;
 }
-
