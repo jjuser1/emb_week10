@@ -186,7 +186,7 @@ int main(int argc, char** argv)
             else if (key == 'p') 
 				{printf("num? : ");
 				while(i < 4 && tmp1 != '\0') { // '\0'는 문자열의 끝을 나타냄
-					key = tmp1
+					key = tmp1;
         			tmp2[i] = tmp1; // 문자를 추가
         			tmp2[i + 1] = '\0'; // 문자열의 끝에 널 문자 추가
         			i++;
@@ -227,3 +227,4 @@ int main(int argc, char** argv)
     close(dev1);
     return 0;
 }
+
