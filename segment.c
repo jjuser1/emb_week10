@@ -183,19 +183,22 @@ int main(int argc, char** argv)
                 down_count();
             }
             else if (key == 'p') {
-		     printf("count setting: ");
+		     /*printf("count setting: ");
            		 while(i < 4 && tmp2 != '\n'){
                		 tmp2 = get_key();
               		 printf("%c", tmp2);
                		 tmp1[i] = tmp2;
               		 //tmp1[i+1] = '\0'
               		 i++;    
+			 */
 			 }
-		num = atoi(tmp1);
-            num3 = num / 1000; // thousands place of num
-               num2 = (num / 100) % 10; // hundreds place of num
-             num1 = (num / 10) % 10; // tens place of num
-             num0 = num % 10; // ones place of num
+	/*
+	num = atoi(tmp1);
+        num3 = num / 1000; // thousands place of num
+        num2 = (num / 100) % 10; // hundreds place of num
+        num1 = (num / 10) % 10; // tens place of num
+        num0 = num % 10; // ones place of num
+	*/
 
             }
 
