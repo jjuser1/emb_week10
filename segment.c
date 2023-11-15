@@ -119,7 +119,6 @@ int main(int argc, char** argv)
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
     int buffer[2];
     ssize_t bytes_read;
-	char inputBuffer[100];
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
         return -1;
@@ -147,7 +146,9 @@ int main(int argc, char** argv)
     data[3] = seg_display(num0, 3);
 
 	int prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
-
+	char tmp1;//count setting
+	char tmp2[10];
+	int i=0;
     while (1) {
         key = get_key();
         bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
@@ -184,13 +185,17 @@ int main(int argc, char** argv)
             }
             else if (key == 'p') 
 				{printf("num? : ");
-				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
-    				if (sscanf(inputBuffer, "%d", &num) == 1) {
-						// 정상적으로 숫자를 입력 받았을 때 처리
-						num3 = num / 1000; // thousands place of num
-						num2 = (num / 100) % 10; // hundreds place of num
-						num1 = (num / 10) % 10; // tens place of num
-						num0 = num % 10; // ones place of num
+				while(i < 4){
+					key = tmp1;
+					printf("%c",tmp1);
+					strcat(tmp2, tmp1);
+					i++;} 
+				num = atoi(tmp2);	
+				// 정상적으로 숫자를 입력 받았을 때 처리
+				num3 = num / 1000; // thousands place of num
+				num2 = (num / 100) % 10; // hundreds place of num
+				num1 = (num / 10) % 10; // tens place of num
+				num0 = num % 10; // ones place of num
 						} 
 				else {
 					printf("Invalid input.\n");
