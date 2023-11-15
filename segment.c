@@ -219,4 +219,5 @@ int main(int argc, char** argv)
     close(dev);
     close(dev1);
     return 0;
+	//test
 }
