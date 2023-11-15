@@ -119,7 +119,6 @@ int main(int argc, char** argv)
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
     char buffer[2];
     ssize_t bytes_read;
-	char inputBuffer[100];
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
         return -1;
@@ -162,16 +161,16 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == 1 && prev_buffer[0] == 0) { // 버튼 1이 눌렸는지 확인
-			up_count();
-			}
-		if (buffer[1] == 1 && prev_buffer[1] == 0) { // 버튼 2가 눌렸는지 확인
-			down_count();
-			}
+			if (buffer[0] != prev_buffer[0] ) { // 버튼 1이 눌렸는지 확인
+				up_count();
+				}
+			if (buffer[1] != prev_buffer[1]) { // 버튼 2가 눌렸는지 확인
+				down_count();
+				}
 
-		// 현재 버튼 상태를 이전 상태로 저장
-		prev_buffer[0] = buffer[0];
-		prev_buffer[1] = buffer[1];
+			// 현재 버튼 상태를 이전 상태로 저장
+			prev_buffer[0] = buffer[0];
+			prev_buffer[1] = buffer[1];
 
 
 
@@ -182,7 +181,7 @@ int main(int argc, char** argv)
             else if (key == 'd') {
                 down_count();
             }
-            else if (key == 'p') {
+           /* else if (key == 'p') {
 				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
     				if (sscanf(inputBuffer, "%d", &num) == 1) {
 						// 정상적으로 숫자를 입력 받았을 때 처리
@@ -196,7 +195,7 @@ int main(int argc, char** argv)
     }
 }
 
-            }
+            }*/
 
             data[0] = seg_display(num3, 0);
             data[1] = seg_display(num2, 1);
@@ -219,5 +218,4 @@ int main(int argc, char** argv)
     close(dev);
     close(dev1);
     return 0;
-	//test
 }

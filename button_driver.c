@@ -36,8 +36,8 @@ static ssize_t driver_read(struct file* File, char* user_buffer, size_t count, l
     to_copy = min(count, sizeof(button_state));
 
     // 버튼의 값을 읽어서 문자로 변환
-    button_state[0] = gpio_get_value(22);
-    button_state[1] = gpio_get_value(27);
+    button_state[0] = gpio_get_value(22)+'0';
+    button_state[1] = gpio_get_value(27)+'0';
 
 	
     // 사용자 버퍼로 데이터를 복사합니다.
