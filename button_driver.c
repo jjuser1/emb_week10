@@ -28,7 +28,7 @@ static struct cdev my_device;
 
 static ssize_t driver_read(struct file* File, char* user_buffer, size_t count, loff_t* offs) {
     int to_copy, not_copied;
-    char button_state[2]; // 두 버튼의 상태를 저장하기 위해
+    int button_state[2]; // 두 버튼의 상태를 저장하기 위해
 
 
 
