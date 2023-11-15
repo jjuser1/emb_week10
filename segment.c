@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
     int buffer[2];
     ssize_t bytes_read;
-	int inputBuffer[100];
+	char inputBuffer[100];
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
         return -1;
