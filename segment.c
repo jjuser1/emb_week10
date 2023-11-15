@@ -117,8 +117,9 @@ int main(int argc, char** argv)
 
     //button_driver	
     int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
-    int buffer[2];
+    char buffer[2];
     ssize_t bytes_read;
+	char inputBuffer[100];
     if (dev1 < 0) {
         printf("gpio_driver Opening was not possible!\n");
         return -1;
@@ -145,10 +146,8 @@ int main(int argc, char** argv)
     data[2] = seg_display(num1, 2);
     data[3] = seg_display(num0, 3);
 
-	int prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
-	char tmp1= "0";//count setting
-	char tmp2[10]= "";
-	int i=0;
+	char prev_buffer[2] = {0}; // 이전 버튼 상태를 저장할 배열 선언
+
     while (1) {
         key = get_key();
         bytes_read = read(dev1, buffer, sizeof(buffer)); // read button state
@@ -163,10 +162,10 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == 1) { // 버튼 1이 눌렸는지 확인
+		if (buffer[0] == 1 && prev_buffer[0] == 0) { // 버튼 1이 눌렸는지 확인
 			up_count();
 			}
-		if (buffer[1] == 1 ) { // 버튼 2가 눌렸는지 확인
+		if (buffer[1] == 1 && prev_buffer[1] == 0) { // 버튼 2가 눌렸는지 확인
 			down_count();
 			}
 
@@ -183,20 +182,14 @@ int main(int argc, char** argv)
             else if (key == 'd') {
                 down_count();
             }
-            else if (key == 'p') 
-				{printf("num? : ");
-				while(i < 4 && tmp1 != '\0') { // '\0'는 문자열의 끝을 나타냄
-					key = tmp1;
-        			tmp2[i] = tmp1; // 문자를 추가
-        			tmp2[i + 1] = '\0'; // 문자열의 끝에 널 문자 추가
-        			i++;
-    }
-				num = atoi(tmp2);	
-				// 정상적으로 숫자를 입력 받았을 때 처리
-				num3 = num / 1000; // thousands place of num
-				num2 = (num / 100) % 10; // hundreds place of num
-				num1 = (num / 10) % 10; // tens place of num
-				num0 = num % 10; // ones place of num
+            else if (key == 'p') {
+				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
+    				if (sscanf(inputBuffer, "%d", &num) == 1) {
+						// 정상적으로 숫자를 입력 받았을 때 처리
+						num3 = num / 1000; // thousands place of num
+						num2 = (num / 100) % 10; // hundreds place of num
+						num1 = (num / 10) % 10; // tens place of num
+						num0 = num % 10; // ones place of num
 						} 
 				else {
 					printf("Invalid input.\n");
@@ -227,4 +220,3 @@ int main(int argc, char** argv)
     close(dev1);
     return 0;
 }
-
