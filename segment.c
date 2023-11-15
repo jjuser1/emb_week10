@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     int dev = open("/dev/my_segment", O_RDWR); // if you want read = 'O_RDONLY' write ='O_WRDONLY', read&write='O_RDWR'
 
     //button_driver	
-    int dev1 = open("/dev/my_gpio", O_RDONLY); // read only
+    int dev1 = open("/dev/my_gpio", O_RDWR); // read only
     char buffer[2];
     ssize_t bytes_read;
     if (dev1 < 0) {
