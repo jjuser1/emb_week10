@@ -183,18 +183,19 @@ int main(int argc, char** argv)
                 down_count();
             }
             else if (key == 'p') {
-				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
-    				if (sscanf(inputBuffer, "%d", &num) == 1) {
-						// 정상적으로 숫자를 입력 받았을 때 처리
-						num3 = num / 1000; // thousands place of num
-						num2 = (num / 100) % 10; // hundreds place of num
-						num1 = (num / 10) % 10; // tens place of num
-						num0 = num % 10; // ones place of num
-						} 
-				else {
-					printf("Invalid input.\n");
-    }
-}
+		     printf("count setting: ");
+           		 while(i < 4 && tmp2 != '\n'){
+               		 tmp2 = get_key();
+              		 printf("%c", tmp2);
+               		 tmp1[i] = tmp2;
+              		 //tmp1[i+1] = '\0'
+              		 i++;    
+			 }
+		num = atoi(tmp1);
+            num3 = num / 1000; // thousands place of num
+               num2 = (num / 100) % 10; // hundreds place of num
+             num1 = (num / 10) % 10; // tens place of num
+             num0 = num % 10; // ones place of num
 
             }
 
