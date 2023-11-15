@@ -162,10 +162,10 @@ int main(int argc, char** argv)
         }
         else {
 		
-		if (buffer[0] == '1' && prev_buffer[0] == '0') { // 버튼 1이 눌렸는지 확인
+		if (buffer[0] == '1') { // 버튼 1이 눌렸는지 확인
 			up_count();
 			}
-		if (buffer[1] == '1' && prev_buffer[1] == '0') { // 버튼 2가 눌렸는지 확인
+		if (buffer[1] == '1' ) { // 버튼 2가 눌렸는지 확인
 			down_count();
 			}
 
@@ -182,7 +182,8 @@ int main(int argc, char** argv)
             else if (key == 'd') {
                 down_count();
             }
-            else if (key == 'p') {
+            else if (key == 'p') 
+				{printf("num? : ");
 				if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != NULL) {
     				if (sscanf(inputBuffer, "%d", &num) == 1) {
 						// 정상적으로 숫자를 입력 받았을 때 처리
