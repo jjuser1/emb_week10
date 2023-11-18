@@ -1,5 +1,5 @@
 obj-m += seg_example_driver.o button_driver.o
-KDIR = ~/working/kernel
+KDIR = ~/working/Raspbian/kernel
 
 RESULT1 = seg_example_program1
 RESULT2 = seg_example_program2
@@ -9,7 +9,7 @@ SRC1 = $(RESULT1).c
 SRC2 = $(RESULT2).c
 SRC3 = $(RESULT3).c
 
-CCC = aarch64-linux-gnu-gcc
+CCC = arm-linux-gnueabihf-gcc
 
 all:
 	make -C $(KDIR) M=$(PWD) modules
