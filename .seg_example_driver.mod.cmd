@@ -1,1 +1,0 @@
-cmd_/home/jjuser/working/emb_week10/seg_example_driver.mod := printf '%s\n'   seg_example_driver.o | awk '!x[$$0]++ { print("/home/jjuser/working/emb_week10/"$$0) }' > /home/jjuser/working/emb_week10/seg_example_driver.mod
