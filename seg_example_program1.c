@@ -21,10 +21,10 @@ int main(int argc, char** argv) {
 	}
 	printf("Opening was successfull!\n");
 
-	if (argv[1][0] == '0' && (argv[1][1] == 'x' || argv[1][1] == 'x')) {
+	if (argv[1][0] == '0' && (argv[1][1] == 'x' || argv[1][1] == 'X')) {
 		buff = (unsigned short)strtol(&argv[1][2], NULL, 16);
 	}
-	else
+else
 		buff = (unsigned short)strtol(&argv[1][0], NULL, 10);
 
 	write(dev, &buff, 2);
